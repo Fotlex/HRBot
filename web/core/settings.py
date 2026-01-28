@@ -11,7 +11,7 @@ ALLOWED_HOSTS = config.DJANGO_ALLOWED_HOSTS
 CSRF_TRUSTED_ORIGINS = config.CSRF_TRUSTED_ORIGINS
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'web.core.apps.CoreAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
