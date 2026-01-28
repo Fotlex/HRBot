@@ -169,3 +169,28 @@ class AboutSection(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+class HelpPart(models.Model):
+    text_on_message = models.TextField('Текст на сообщении с кнопками')
+    
+    class Meta:
+        verbose_name = 'Главный текст "Помощь"'
+        verbose_name_plural = 'Главный текст "Помощь"'
+
+    def __str__(self):
+        return 'Текст в разделе "Помощь"'
+    
+    
+class HelpButton(models.Model):
+    text_on_btn = models.CharField(max_length=30, verbose_name='Текст на кнопке')
+    url = models.CharField(max_length=255, verbose_name='Ссылка в кнопке')
+    
+    is_active = models.BooleanField(default=True, verbose_name='Активна ли кнопка')
+    
+    class Meta:
+        verbose_name = 'Кнопки "Помощь"'
+        verbose_name_plural = 'Кнопка "Помощь"'
+
+    def __str__(self):
+        return f'Кнопка {self.text_on_btn}'

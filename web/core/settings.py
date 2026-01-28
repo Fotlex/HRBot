@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admin_reorder',
     'django_celery_beat',
     'nested_admin',
     'web.panel'
@@ -30,7 +31,39 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
+
+ADMIN_REORDER = (
+    {
+        'app': 'panel',
+        'label': 'Панель управления',
+        'models': (
+            'panel.User',
+            'panel.Department',
+            'panel.Document',
+            'panel.Quiz',
+            'panel.Question',
+            'panel.QuizAttempt',
+            'panel.AboutSection',
+            'panel.HelpPart',
+            'panel.HelpButton',
+            'panel.Mailing',
+        )
+    },
+    {
+        'app': 'django_celery_beat',
+        'label': 'Периодические задачи',
+        'models': (
+            'django_celery_beat.PeriodicTask',
+            'django_celery_beat.IntervalSchedule',
+            'django_celery_beat.CrontabSchedule',
+            'django_celery_beat.SolarSchedule',
+            'django_celery_beat.ClockedSchedule',
+        )
+    },
+)
 
 ROOT_URLCONF = 'web.core.urls'
 

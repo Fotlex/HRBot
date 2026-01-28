@@ -13,7 +13,7 @@ from config import config
 import asyncio
 
 from core.middlewares import UserMiddleware
-from core.handlers import start, menu, quiz, info
+from core.handlers import start, menu, quiz, info, help
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 
 
@@ -29,6 +29,7 @@ async def main():
         menu.router,
         quiz.router,
         info.router,
+        help.router,
     )
 
     logging.basicConfig(level=logging.INFO)

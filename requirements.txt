@@ -18,6 +18,7 @@ click-repl==0.3.0
 cron_descriptor==2.0.6
 Django==5.2.1
 django-celery-beat==2.8.1
+django-modeladmin-reorder==0.3.1
 django-nested-admin==4.1.6
 django-timezone-field==7.2.1
 frozenlist==1.6.0

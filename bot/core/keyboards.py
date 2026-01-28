@@ -2,6 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.filters.callback_data import CallbackData
 
+from web.panel.models import HelpButton, HelpPart
+
 main_menu_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="Мои документы"), KeyboardButton(text="Квизы")],
@@ -78,4 +80,16 @@ def get_about_keyboard(sections) -> InlineKeyboardMarkup:
 def get_back_to_about_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text="🔙 Назад к списку", callback_data="back_to_about_list")
+    return builder.as_markup()
+
+
+def get_help_buttons_keyboard(buttons: HelpButton) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    
+    for button in buttons:
+        builder.button(
+            text=button.text_on_btn,
+            url=button.url
+        )
+    builder.adjust(1)
     return builder.as_markup()
