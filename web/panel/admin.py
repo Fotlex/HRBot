@@ -3,13 +3,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import *
 from nested_admin import NestedStackedInline, NestedModelAdmin
+from web.core.admin import site
 
-@admin.register(Department)
+@admin.register(Department, site=site)
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
-@admin.register(User)
+@admin.register(User, site=site)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'full_name', 'department', 'quiz_stats', 'is_active', 'created_at')
     list_filter = ('department', 'is_active')
@@ -38,7 +39,7 @@ class UserAdmin(admin.ModelAdmin):
         return f"{passed} из {total}"
 
 
-@admin.register(Document)
+@admin.register(Document, site=site)
 class DocumentAdmin(admin.ModelAdmin):
     list_display = ('title', 'department', 'created_at')
     list_filter = ('department',)
@@ -56,7 +57,7 @@ class QuestionNestedInline(NestedStackedInline):
     inlines = [AnswerNestedInline]
     fk_name = 'quiz'
 
-@admin.register(Quiz)
+@admin.register(Quiz, site=site)
 class QuizAdmin(NestedModelAdmin):
     list_display = ('title', 'document', 'department')
     list_filter = ('department',)
@@ -67,7 +68,7 @@ class AnswerInline(admin.TabularInline):
     model = Answer
     extra = 1
 
-@admin.register(Question)
+@admin.register(Question, site=site)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('text', 'quiz')
     list_filter = ('quiz__department',)
@@ -99,7 +100,7 @@ class UserAnswerInline(admin.TabularInline):
     def is_correct_display(self, obj):
         return obj.answer.is_correct
 
-@admin.register(QuizAttempt)
+@admin.register(QuizAttempt, site=site)
 class QuizAttemptAdmin(admin.ModelAdmin):
     list_display = ('user', 'quiz', 'score', 'completed_at')
     list_filter = ('quiz__department', 'quiz')
@@ -114,7 +115,7 @@ class AttachmentsInline(admin.TabularInline):
     exclude = ('file_id',)
     extra = 0
 
-@admin.register(Mailing)
+@admin.register(Mailing, site=site)
 class MailingAdmin(admin.ModelAdmin):
     list_display = ['datetime', 'short_text', 'departments_list', 'is_ok']
     readonly_fields = ['is_ok']
@@ -143,13 +144,13 @@ class MailingAdmin(admin.ModelAdmin):
         return ", ".join([d.name for d in deps])
     
     
-@admin.register(AboutSection)
+@admin.register(AboutSection, site=site)
 class AboutSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'order')
     list_editable = ('order',)
     
     
-@admin.register(HelpButton)
+@admin.register(HelpButton, site=site)
 class HelpButtonAdmin(admin.ModelAdmin):
     pass
 
@@ -171,6 +172,6 @@ class SingletonModelAdmin(admin.ModelAdmin):
         return False
     
     
-@admin.register(HelpPart)
+@admin.register(HelpPart, site=site)
 class HelpPartAdmin(SingletonModelAdmin):
     pass
