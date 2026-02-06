@@ -35,11 +35,28 @@ class User(models.Model):
         verbose_name_plural = 'Сотрудники'
 
 
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    comment = models.TextField(verbose_name='Содержание коментария')
+    
+    def __str__(self):
+        return 'Коментарий'
+    
+    class Meta:
+        verbose_name = 'Коментарий'
+        verbose_name_plural = 'Коментарии'
+
+
 class Document(models.Model):
     title = models.CharField('Название документа', max_length=255)
     description = models.TextField('Описание', null=True, blank=True)
     file = models.FileField('Файл', upload_to='documents/')
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name='Подразделение', related_name='documents')
+    department = models.ManyToManyField(
+        Department,
+        on_delete=models.SET_NULL,
+        verbose_name='Подразделения',
+        related_name='documents'
+    )
     created_at = models.DateTimeField('Дата загрузки', auto_now_add=True)
 
     def __str__(self):
@@ -54,7 +71,7 @@ class Quiz(models.Model):
     title = models.CharField('Название квиза', max_length=255)
     document = models.ForeignKey(Document, on_delete=models.CASCADE, verbose_name='Документ', related_name='quiz')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, verbose_name='Подразделение', related_name='quizzes')
-    send_delay_hours = models.PositiveIntegerField('Задержка отправки (часы)', default=24)
+    send_delay_hours = models.PositiveIntegerField('Задержка отправки (часы)', default=0, editable=False)
 
     def __str__(self):
         return self.title
@@ -95,6 +112,12 @@ class QuizAttempt(models.Model):
     completed_at = models.DateTimeField('Дата завершения', auto_now_add=True)
     score = models.PositiveIntegerField('Результат (правильных ответов)')
 
+    @property
+    def total_questions_count(self):
+        return self.quiz.questions.count()
+        
+    total_questions_count.fget.short_description = 'Всего вопросов'
+    
     def __str__(self):
         return f'Попытка {self.user} в квизе {self.quiz.title}'
 

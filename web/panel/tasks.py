@@ -27,6 +27,7 @@ def send_mailing(mailing_id: int):
                 json={
                     'chat_id': user_id,
                     'text': mailing.text,
+                    'parse_mode': 'HTML',
                 }
             )
             return
@@ -42,7 +43,8 @@ def send_mailing(mailing_id: int):
                         url=f'https://api.telegram.org/bot{config.BOT_TOKEN}/send{attachment_type.capitalize()}',
                         data={
                             'chat_id': user_id,
-                            'caption': mailing.text
+                            'caption': mailing.text,
+                            'parse_mode': 'HTML',
                         },
                         files=files
                     )
@@ -62,6 +64,7 @@ def send_mailing(mailing_id: int):
                 data={
                     'chat_id': user_id,
                     'caption': mailing.text,
+                    'parse_mode': 'HTML',
                     attachment_type: attachment.file_id,
                 }
             )
@@ -126,7 +129,7 @@ def _send_telegram_message(user_id: int, text: str):
 def notify_new_document(document_id: int):
     try:
         doc = Document.objects.get(id=document_id)
-        users_to_notify = User.objects.filter(department=doc.department, is_active=True)
+        users_to_notify = User.objects.filter(department__in=doc.department.all(), is_active=True)
         message = f"📚 Появился новый документ: «{doc.title}».\n\nВы можете найти его в разделе «Мои документы»."
         for user in users_to_notify:
             _send_telegram_message(user.id, message)

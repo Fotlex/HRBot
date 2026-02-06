@@ -9,10 +9,22 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
+
+class CommentInline(admin.TabularInline):
+    model = Comment
+    
+    fields = ('comment',) 
+    
+    extra = 1 
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'full_name', 'department', 'quiz_stats', 'is_active', 'created_at')
     list_filter = ('department', 'is_active')
+    
+    inlines = [CommentInline]
+    
     search_fields = ('username', 'first_name', 'last_name')
     readonly_fields = ('id', 'username', 'first_name', 'last_name', 'created_at')
     fieldsets = (
@@ -43,6 +55,12 @@ class DocumentAdmin(admin.ModelAdmin):
     list_display = ('title', 'department', 'created_at')
     list_filter = ('department',)
     search_fields = ('title',)
+    
+    filter_horizontal = ('department',) 
+
+    @admin.display(description='Подразделения')
+    def display_departments(self, obj):
+        return ", ".join([d.name for d in obj.department.all()])
 
 
 class AnswerNestedInline(NestedStackedInline):
@@ -66,12 +84,6 @@ class QuizAdmin(NestedModelAdmin):
 class AnswerInline(admin.TabularInline):
     model = Answer
     extra = 1
-
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('text', 'quiz')
-    list_filter = ('quiz__department',)
-    inlines = [AnswerInline]
 
 
 class UserAnswerInline(admin.TabularInline):
@@ -101,7 +113,7 @@ class UserAnswerInline(admin.TabularInline):
 
 @admin.register(QuizAttempt)
 class QuizAttemptAdmin(admin.ModelAdmin):
-    list_display = ('user', 'quiz', 'score', 'completed_at')
+    list_display = ('user', 'quiz', 'score', 'total_questions_count', 'completed_at')
     list_filter = ('quiz__department', 'quiz')
     readonly_fields = ('user', 'quiz', 'score', 'completed_at')
     inlines = [UserAnswerInline]

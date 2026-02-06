@@ -26,8 +26,8 @@ async def handle_about_section_press(query: CallbackQuery, callback_data: AboutC
         section = await AboutSection.objects.aget(id=section_id)
         
         await query.message.edit_text(
-            text=f"🏢 *{section.title}*\n\n{section.text}",
-            parse_mode="Markdown",
+            text=f"🏢 {section.title}\n\n{section.text}",
+            parse_mode="HTML",
             reply_markup=get_back_to_about_keyboard()
         )
     except AboutSection.DoesNotExist:
