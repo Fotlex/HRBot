@@ -48,6 +48,9 @@ class UserAdmin(admin.ModelAdmin):
         passed = QuizAttempt.objects.filter(user=obj).values('quiz').distinct().count()
         
         return f"{passed} из {total}"
+    
+    class Media:
+        js = ('js/admin_popup_fix.js',)
 
 
 @admin.register(Document)
@@ -61,6 +64,9 @@ class DocumentAdmin(admin.ModelAdmin):
     @admin.display(description='Подразделения')
     def display_departments(self, obj):
         return ", ".join([d.name for d in obj.department.all()])
+    
+    class Media:
+        js = ('js/admin_popup_fix.js',)
 
 
 class AnswerNestedInline(NestedStackedInline):
@@ -80,6 +86,9 @@ class QuizAdmin(NestedModelAdmin):
     list_filter = ('department',)
     search_fields = ('title',)
     inlines = [QuestionNestedInline]
+    
+    class Media:
+        js = ('js/admin_popup_fix.js',)
 
 class AnswerInline(admin.TabularInline):
     model = Answer
@@ -120,6 +129,10 @@ class QuizAttemptAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+    
+    class Media:
+        js = ('js/admin_popup_fix.js',)
+        
 
 class AttachmentsInline(admin.TabularInline):
     model = Attachments
@@ -154,11 +167,17 @@ class MailingAdmin(admin.ModelAdmin):
             return "📢 ВСЕМ"
         return ", ".join([d.name for d in deps])
     
+    class Media:
+        js = ('js/admin_popup_fix.js',)
+    
     
 @admin.register(AboutSection)
 class AboutSectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'order')
     list_editable = ('order',)
+    
+    class Media:
+        js = ('js/admin_popup_fix.js',)
     
     
 @admin.register(HelpButton)

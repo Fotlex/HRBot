@@ -120,6 +120,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = 'web/static_root/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BROKER_URL = f'redis://{config.REDIS_HOST if not config.DEBUG else "localhost"}:{config.REDIS_PORT}/0'

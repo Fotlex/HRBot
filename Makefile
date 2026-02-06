@@ -75,7 +75,7 @@ makemigrations:
 .PHONY: collectstatic
 collectstatic:
 	@echo "Collecting static files for $(ENV) environment..."
-	@$(DOCKER_COMPOSE) exec app python project/manage.py collectstatic --noinput
+	@$(DOCKER_COMPOSE) exec web python web/manage.py collectstatic --noinput
 
 
 # --------------- SETUP & SSL --------------- #
