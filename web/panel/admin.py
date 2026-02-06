@@ -52,7 +52,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'department', 'created_at')
+    list_display = ('title', 'display_departments', 'created_at')
     list_filter = ('department',)
     search_fields = ('title',)
     
