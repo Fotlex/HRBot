@@ -53,7 +53,6 @@ class Document(models.Model):
     file = models.FileField('Файл', upload_to='documents/')
     department = models.ManyToManyField(
         Department,
-        on_delete=models.SET_NULL,
         verbose_name='Подразделения',
         related_name='documents'
     )
